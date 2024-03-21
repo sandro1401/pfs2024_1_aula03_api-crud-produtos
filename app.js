@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-let produtos = [
+let Listaprodutos = [
     {
         id:1,
         nome: "Produto1",
@@ -16,6 +16,7 @@ let produtos = [
     }
 ];
 
+app.use(express.json());
 
 
 app.get('/', (req, res) => {
@@ -28,7 +29,7 @@ app.get('/produtos', (req, res) => {
 
   app.get('/produtos/:id', (req, res) => {
     const id = +req.params.id;
-    let produto = produtos.find((produto) =>
+    let produto = Listaprodutos.find((produto) =>
     {return produto.id === id;}
     )
     if(produto){
@@ -39,9 +40,14 @@ app.get('/produtos', (req, res) => {
     }
 
 
-    res.json({id:+req.params.id});
   })
 
+app.post("/produtos", (req, res)=> {
+    const produto = req.body;
+    Listaprodutos.push(produto);
+    res.status(201).json(produto);
+
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
