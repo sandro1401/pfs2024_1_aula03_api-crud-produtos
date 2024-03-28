@@ -49,6 +49,34 @@ app.post("/produtos", (req, res)=> {
 
 })
 
+app.put("/produtos/:id", (req, res)=> {
+  const produtoPayload = req.body;
+  const id = +req.params.id;
+  let produtoAlterado;
+
+  for(let produto of Listaprodutos){
+    if(produto.id === id){
+      produto.nome = produtoPayload.nome;
+      produto.preco = produtoPayload.preco;
+      res.json(produto);
+      return;
+    }
+  }
+  res.status(404).json({erro: "Produto não encontardo"})
+
+})
+
+app.delete("/produtos/:id", (req, res)=> {
+  const id = +req.params.id;
+  let indice = Listaprodutos.findIndex((produto) =>
+  {return produto.id === id;})
+  if(indice >=0){
+    res.json(Listaprodutos.splice(indice,1));
+  }
+  else{res.status(404).json({erro: "Produto não encontrado"})}
+
+})
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
